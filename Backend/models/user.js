@@ -1,9 +1,12 @@
 'use strict';
+require('dotenv').config();
+const bcrypt = require('bcrypt');
 const {
   Model
 } = require('sequelize');
+const { subscribe } = require('../routes');
 module.exports = (sequelize, DataTypes) => {
-  class user extends Model {
+  class User extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -13,7 +16,7 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   };
-  user.init({
+  User.init({
     name: {
       type : DataTypes.STRING,
       allowNull: false
@@ -37,5 +40,14 @@ module.exports = (sequelize, DataTypes) => {
     sequelize,
     modelName: 'User',
   });
-  return user;
+
+  User.addHook('beforeCreate', async (user, options)=>{
+    const salt = await bcrypt.genSaltSync(+process.env.SALT_ROUNDS);
+    return bcrypt.hash(user.password, salt).then((hash) => {
+      user.password = hash;
+      user.salt = salt;
+    });
+  })
+
+  return User;
 };
