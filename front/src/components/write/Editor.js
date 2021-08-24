@@ -40,6 +40,7 @@ const WriteEditor = ({ title, body, onChangeField }) => {
 					height="400px"
 					previewStyle="vertical"
 					onChange={onChangeContent}
+					initialValue={body? body : '글을 입력하세요'}
 				/>
 			</EditorBlock>
 		</div>

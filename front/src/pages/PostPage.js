@@ -1,5 +1,13 @@
+import HeaderContainer from "../containers/common/HeaderContainer"
+import PostViewerContainer from "../containers/post/PostViewerContainer";
+
 const PostPages = () => {
-	return <div>포스트 읽기</div>
+	return (
+		<div>
+			<HeaderContainer />
+			<PostViewerContainer />
+		</div>
+	)
 }
 
 export default PostPages;
