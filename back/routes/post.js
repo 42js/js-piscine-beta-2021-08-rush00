@@ -4,7 +4,6 @@ const { decodeToken } = require('./auth/authJwt');
 const { User, Post } = require('../models/index');
 
 const router = express.Router();
-// const replyRouter = require('./reply');
 
 // const badRequest = { msg: 'Bad Request' };
 
@@ -47,22 +46,35 @@ router
   // searching
   .get('', (req, res) => {
     const { user, number } = req.query;
-    if (!isNonNegativeInt(number)) {
+    const postId = req.query.post_id;
+    if (postId) {
+      Post.findAll({ where: { id: postId } })
+        .then((posts) => {
+          res.status(200).send({
+            msg: 'Successfully fetched',
+            data: posts[posts.length - 1],
+          });
+        });
+    } else if (number) {
+      if (!isNonNegativeInt(number)) {
+        res.status(400).send({ msg: 'Bad request' });
+      }
+      const condition = { limit: parseInt(number, 10), order: [['createdAt', 'DESC']] };
+      if (user) {
+        condition.where = { username: user };
+      }
+      Post.findAll(condition)
+        .then((posts) => {
+          res.status(200).send({
+            msg: 'Successfully fetched',
+            data: posts,
+          });
+        }).catch((err) => {
+          res.status(500).send({ msg: err.message });
+        });
+    } else {
       res.status(400).send({ msg: 'Bad request' });
     }
-    const condition = { limit: parseInt(number, 10), order: [['createdAt', 'DESC']] };
-    if (user) {
-      condition.where = { username: user };
-    }
-    Post.findAll(condition)
-      .then((posts) => {
-        res.status(200).send({
-          msg: 'Successfully fetched',
-          posts,
-        });
-      }).catch((err) => {
-        res.status(500).send({ msg: err.message });
-      });
   })
   // deleting
   .delete('', async (req, res) => {
@@ -104,13 +116,12 @@ router
         const post = posts[0];
         if (title) post.title = title;
         if (content) post.content = content;
-        post.save();
+        await post.save();
         res.status(200).send({ msg: 'Post is successfully edited' });
       }
     } catch (err) {
       res.status(500).send({ msg: err.message });
     }
   });
-// .use('*', replyRouter);
 
 module.exports = router;

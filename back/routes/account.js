@@ -106,7 +106,6 @@ router
         res.status(200).send({ msg: 'The user is being logged in.' });
       }
     } catch (err) {
-      console.log(err);
       res.status(500).send(internalError(err));
     }
   });

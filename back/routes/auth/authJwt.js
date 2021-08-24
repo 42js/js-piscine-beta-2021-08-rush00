@@ -19,7 +19,7 @@ const issueRefreshToken = async (id) => {
   const data = await User.findAll({ Where: { id } });
   const user = data[data.length - 1];
   user.refreshToken = token;
-  user.save();
+  await user.save();
   return { token, exp };
 };
 
@@ -78,9 +78,6 @@ const verifyToken = async (refreshToken, accessToken) => {
     const accessPayload = await jwt.verify(accessToken, secretKey);
     const data = await User.findAll({ Where: { id: accessPayload.id } });
     const user = data[data.length - 1];
-    console.log(user.id);
-    console.log(whiteList[`${accessPayload.id}`]);
-    console.log(user.refreshToken);
     if (whiteList[`${accessPayload.id}`] || user.refreshToken === refreshToken) {
       return true;
     }
@@ -96,12 +93,11 @@ const invalidateRefreshToken = async (token) => {
   const data = await User.findAll({ Where: { id: payload.id } });
   const user = data[data.length - 1];
   user.refreshToken = null;
-  user.save();
+  await user.save();
 };
 
 const invalidateAccessToken = (id) => {
   delete whiteList[`${id}`];
-  console.log(id);
 };
 
 module.exports.decodeToken = decodeToken;
