@@ -45,7 +45,8 @@ router
   })
   // searching
   .get('', (req, res) => {
-    const { user, number } = req.query;
+    const { user } = req.query;
+    let { number } = req.query;
     const postId = req.query.post_id;
     if (postId) {
       Post.findAll({ where: { id: postId } })
@@ -55,11 +56,16 @@ router
             data: posts[posts.length - 1],
           });
         });
-    } else if (number) {
+    } else {
+      if (!number) {
+        number = 10;
+      } else {
+        number = parseInt(number, 10);
+      }
       if (!isNonNegativeInt(number)) {
         res.status(400).send({ msg: 'Bad request' });
       }
-      const condition = { limit: parseInt(number, 10), order: [['createdAt', 'DESC']] };
+      const condition = { limit: number, order: [['createdAt', 'DESC']] };
       if (user) {
         condition.where = { username: user };
       }
@@ -72,8 +78,6 @@ router
         }).catch((err) => {
           res.status(500).send({ msg: err.message });
         });
-    } else {
-      res.status(400).send({ msg: 'Bad request' });
     }
   })
   // deleting
