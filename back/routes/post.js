@@ -7,7 +7,6 @@ const router = express.Router();
 // const replyRouter = require('./reply');
 
 // const badRequest = { msg: 'Bad Request' };
-const wrongApproach = { msg: 'Wrong approach' };
 
 const isNonNegativeInt = (number) => {
   if (!number || Number.isNaN(number) || !Number.isInteger(parseFloat(number))) {
@@ -42,7 +41,6 @@ router
       });
       res.status(201).send({ msg: 'Successfully posted', data: { postId: post.id } });
     } catch (err) {
-      console.log(err);
       res.status(500).send({ msg: err.message });
     }
   })
@@ -110,7 +108,6 @@ router
         res.status(200).send({ msg: 'Post is successfully edited' });
       }
     } catch (err) {
-      console.log(err);
       res.status(500).send({ msg: err.message });
     }
   });
