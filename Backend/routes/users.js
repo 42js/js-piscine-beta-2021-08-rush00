@@ -1,7 +1,6 @@
-
 const express = require('express');
 const router = express.Router();
-
+const AuthenticateJWT = require('../lib/auth');
 const UserController = require('../controllers/users');
 
 
@@ -15,6 +14,7 @@ router.post('/signup',UserController.signup);
 
 router.post('/login',UserController.login);
 
+router.post('/profile',AuthenticateJWT,UserController.profile);
 
 
 module.exports = router;
