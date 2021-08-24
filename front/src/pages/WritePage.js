@@ -1,12 +1,12 @@
 import Responsive from "../components/common/Responsive";
-import WriteEditor from "../components/write/Editor";
-import WriteActionButtons from "../components/write/WriteActionButtonsBlock";
+import EditorContainer from "../containers/write/EditorContainer";
+import WriteActionButtonsContainer from "../containers/write/WriteActionButtonsContainer";
 
 const WritePage = () => {
 	return (
 		<Responsive>
-			<WriteEditor />
-			<WriteActionButtons />
+			<EditorContainer />
+			<WriteActionButtonsContainer />
 		</Responsive>
 	)
 }
