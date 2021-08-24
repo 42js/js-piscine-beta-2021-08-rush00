@@ -63,7 +63,7 @@ const LoginForm = ({ history }) => {
 			return ;
 		}
 		if (auth) {
-			console.log('로그인 성공');
+			console.log('로그인 성공', auth);
 			dispatch(check());
 		}
 	}, [auth, authError, dispatch]);
@@ -72,12 +72,12 @@ const LoginForm = ({ history }) => {
 		if (user) {
 			history.push('/');
 			try {
-				localStorage.setItem('user', JSON.stringify(user));
+				localStorage.setItem('user', JSON.stringify(auth.data));
 			} catch (e) {
 				console.log('localStorage is not working');
 			}
 		}
-	}, [history, user]);
+	}, [history, user, auth]);
 
 	return (
 		<AuthForm

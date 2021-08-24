@@ -50,8 +50,9 @@ const PostItem = ({ post }) => {
 }
 
 const PostList = ({ posts, loading, error, showWriteButton }) => {
+	console.log(posts)
 	if (error) {
-		return <PostListBlock>에러가 발생했습니다.</PostListBlock>;
+		return <PostListBlock>로그인을 해주세요</PostListBlock>;
 	}
 
 	return (

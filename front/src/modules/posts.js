@@ -10,8 +10,7 @@ const [
 ] = createRequestActionTypes('posts/LIST_POSTS');
 
 export const listPosts = createAction(
-	LIST_POSTS,
-	({ tag, username, page }) => ({ tag, username, page }),
+	LIST_POSTS
 );
 
 const listPostsSaga = createRequestSaga(LIST_POSTS, postsAPI.listPosts);

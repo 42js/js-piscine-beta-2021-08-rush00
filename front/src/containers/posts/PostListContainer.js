@@ -1,4 +1,3 @@
-import qs from 'qs';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { withRouter } from 'react-router-dom';
@@ -16,11 +15,8 @@ const PostListContainer = ({ location, match }) => {
 		})
 	);
 	useEffect(() => {
-		const { username } = match.params;
-		const { page } = qs.parse(location.search, {
-			ignoreQueryPrefix: true
-		});
-		dispatch(listPosts({ username, page }));
+		// const { username } = match.params;
+		dispatch(listPosts());
 	}, [dispatch, location.search, match.params]);
 
 	return (

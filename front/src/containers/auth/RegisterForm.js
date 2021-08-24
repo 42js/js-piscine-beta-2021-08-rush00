@@ -71,15 +71,15 @@ const RegisterForm = ({ history }) => {
 		}
 	}, [auth, authError, dispatch, history, error]);
 
-	useEffect(() => {
-		if (user) {
-			try {
-				localStorage.setItem('user', JSON.stringify(user));
-			} catch (e) {
-				console.log('localStorage is not working');
-			}
-		}
-	}, [user]);
+	// useEffect(() => {
+	// 	if (user) {
+	// 		try {
+	// 			localStorage.setItem('user', JSON.stringify(user));
+	// 		} catch (e) {
+	// 			console.log('localStorage is not working');
+	// 		}
+	// 	}
+	// }, [user]);
 
 	return (
 		<AuthForm

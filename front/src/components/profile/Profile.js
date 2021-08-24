@@ -30,7 +30,7 @@ const Profile = ({ user }) => {
 	return (
 		<ProfileBlock>
 			<ProfileHead>
-				<h1>{user}</h1>
+				<div>ID : {user.username}</div>
 			</ProfileHead>
 			<ProfileContent>
 				<div>안녕안녕</div>

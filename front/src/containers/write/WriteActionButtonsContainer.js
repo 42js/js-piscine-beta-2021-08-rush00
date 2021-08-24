@@ -33,8 +33,9 @@ const WriteActionButtonsContainer = ({ history }) => {
 
 	useEffect(() => {
 		if (post) {
-			const { _id, user } = post;
-			history.push(`/@${user.username}/${_id}`);
+			const username = JSON.parse(localStorage.getItem('user'));
+			const _id = post.data.postId;
+			history.push(`/@${username.username}/${_id}`);
 		}
 		if (postError) {
 			if (postError.response.status === 400) {
