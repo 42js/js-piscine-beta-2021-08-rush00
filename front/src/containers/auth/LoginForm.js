@@ -40,18 +40,22 @@ const LoginForm = ({ history }) => {
 	useEffect(() => {
 		if (authError) {
 			if (authError.response.status === 400) {
+				dispatch(initializeForm('login'));
 				setError('유효하지 않은 아이디나 비밀번호입니다');
 				return ;
 			}
 			else if (authError.response.status === 401) {
+				dispatch(initializeForm('login'));
 				setError('아이디나 비밀번호가 존재하지 않습니다');
 				return ;
 			}
 			else if (authError.response.status === 409) {
+				dispatch(initializeForm('login'));
 				setError('이미 로그인 중인 아이디입니다');
 				return ;
 			}
 			else if (authError.response.status === 500) {
+				dispatch(initializeForm('login'));
 				setError('네트워크 연결을 확인하세요');
 				return ;
 			}

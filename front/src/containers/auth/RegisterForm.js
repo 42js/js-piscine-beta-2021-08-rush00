@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from "react-redux"
 import { withRouter } from "react-router-dom";
 import AuthForm from "../../components/auth/AuthForm";
 import { changeField, initializeForm, register } from "../../modules/auth";
-import { check } from "../../modules/user";
 
 const RegisterForm = ({ history }) => {
 	const [error, setError] = useState(null);
@@ -49,7 +48,7 @@ const RegisterForm = ({ history }) => {
 	useEffect(() => {
 		if (authError) {
 			if (authError.response.status === 400) {
-				setError('사용할 수 없는 아이디나 비밀번호입니다');
+				setError('비밀번호를 길게 써주세요');
 				return ;
 			}
 			else if (authError.response.status === 409) {
@@ -67,20 +66,20 @@ const RegisterForm = ({ history }) => {
 		if (auth) {
 			console.log('회원가입 성공');
 			console.log(auth);
-			dispatch(check());
+			dispatch(initializeForm('register'));
+			history.push('/login');
 		}
-	}, [auth, authError, dispatch]);
+	}, [auth, authError, dispatch, history, error]);
 
 	useEffect(() => {
 		if (user) {
-			history.push('/');
 			try {
 				localStorage.setItem('user', JSON.stringify(user));
 			} catch (e) {
 				console.log('localStorage is not working');
 			}
 		}
-	}, [user, history]);
+	}, [user]);
 
 	return (
 		<AuthForm
