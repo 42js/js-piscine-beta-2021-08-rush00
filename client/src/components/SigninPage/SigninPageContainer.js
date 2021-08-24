@@ -7,7 +7,7 @@ function SigninPage() {
     const onFinish = (body) => {
         console.log(body);
         axios
-            .post("localhost:4242/users/signin", body)
+            .post("http://localhost:4242/users/login", body)
             .then((res) => {
                 console.log(res.message);
                 if (res.status === 200) {
