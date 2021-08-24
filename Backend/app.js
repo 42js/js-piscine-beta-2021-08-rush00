@@ -14,6 +14,12 @@ const usersRouter = require('./routes/users');
 const app = express();
 sequelize.sync();
 
+
+const corsOptions = {
+    origin: "http://localhost:3000",
+    credentials: true
+  }
+  
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -22,7 +28,7 @@ app.use(cookieParser());
 app.use(passport.initialize()); //요청 req 객체에 passport 설정
 passportConfig();
 
-app.use(cors());
+app.use(cors(corsOptions));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
