@@ -2,7 +2,11 @@ import React from "react";
 import ReactDOM from "react-dom";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
+import "antd/dist/antd.css";
+import axios from "axios";
 
+axios.defaults.baseURL = "localhost:4242";
+axios.defaults.withCredentials = true;
 ReactDOM.render(
     <React.StrictMode>
         <App />
