@@ -1,10 +1,11 @@
 import HeaderContainer from "../containers/common/HeaderContainer"
+import ProfileContainer from "../containers/profile/ProfileContainer"
 
 const ProfilePage = () => {
 	return (
 		<div>
 			<HeaderContainer />
-			프로파일
+			<ProfileContainer />
 		</div>
 	)
 }
