@@ -8,10 +8,17 @@ import ProfilePage from "./components/views/ProfilePage/ProfilePage";
 import SigninPage from "./components/views/SigninPage/SigninPage";
 import SIgnupPage from "./components/views/SignupPage/SIgnupPage";
 
+import { Layout } from "antd";
+const { Header } = Layout;
+
 function App() {
     return (
         <Router>
-            <NavBar></NavBar>
+            <Layout>
+                <Header>
+                    <NavBar></NavBar>
+                </Header>
+            </Layout>
 
             <Switch>
                 <Route exact path="/" component={LandingPage} />
