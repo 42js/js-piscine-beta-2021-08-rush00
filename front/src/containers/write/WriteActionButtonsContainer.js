@@ -37,6 +37,10 @@ const WriteActionButtonsContainer = ({ history }) => {
 			history.push(`/@${user.username}/${_id}`);
 		}
 		if (postError) {
+			if (postError.response.status === 400) {
+				console.log('제목을 입력하세요')
+				return ;
+			}
 			console.log(postError);
 		}
 	}, [history, post, postError]);
