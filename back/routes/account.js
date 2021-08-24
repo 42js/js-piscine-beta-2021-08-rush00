@@ -78,7 +78,7 @@ router
         .status(200)
         .cookie('access_token', access.token, { httpOnly: true, expires: new Date(access.exp) })
         .cookie('refresh_token', refresh.token, { httpOnly: true, expires: new Date(refresh.exp) })
-        .send({ msg: 'successfully logged in' });
+        .send({ msg: 'successfully logged in', data: { username: req.body.username } });
     } catch (err) {
       res.status(500).send(internalError(err));
     }
