@@ -13,7 +13,7 @@ const { User } = require('../models/index');
 
 const router = express.Router();
 
-const badRequest = { msg: 'Bad Request' };
+const badRequest = { msg: 'Bad request' };
 const wrongInfo = { msg: 'Wrong username or password' };
 const alreadyLoggedIn = { msg: 'Already logged in' };
 const alreadyExist = { msg: 'User already exists' };
@@ -52,7 +52,6 @@ router
   .use(cookieParser())
   .post('/login', async (req, res) => {
     try {
-      console.log('here');
       if (await verifyToken(req.cookies.refresh_token, req.cookies.access_token)) {
         res.status(409).send(alreadyLoggedIn);
         return;
@@ -86,10 +85,10 @@ router
   })
   .post('/logout', async (req, res) => {
     try {
-      const userId = await decodeToken(req, res);
-      if (userId) {
+      const { id } = await decodeToken(req, res);
+      if (id) {
         invalidateRefreshToken(req.cookies.refresh_token);
-        invalidateAccessToken(userId);
+        invalidateAccessToken(id);
         res.status(200).clearCookie().send({ msg: 'Successfully logged out' });
       }
     } catch (err) {
@@ -107,6 +106,7 @@ router
         res.status(200).send({ msg: 'The user is being logged in.' });
       }
     } catch (err) {
+      console.log(err);
       res.status(500).send(internalError(err));
     }
   });

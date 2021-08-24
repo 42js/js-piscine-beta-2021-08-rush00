@@ -48,20 +48,23 @@ const decodeToken = async (req, res, next) => {
       const refresh = await issueRefreshToken(accessPayload.id);
       res.cookie('refresh_token', refresh.token, { httpOnly: true, expires: new Date(refresh.exp) });
       req.id = accessPayload.id;
-      next();
+      if (next) next();
+      return { id: req.id };
     }
   } else if (accessPayload === null) {
     const access = await issueAccessToken(refreshPayload.id);
     res.cookie('access_token', access.token, { httpOnly: true, expires: new Date(access.exp) });
     req.id = accessPayload.id;
-    next();
+    if (next) next();
+    return { id: req.id };
   } else {
     if (accessPayload.id !== refreshPayload.id || whiteList[`${accessPayload.id}`] !== accessPayload.sugar) {
       res.status(401).send(notLoggedIn);
       return false;
     }
-    req.id = accessPayload;
-    next();
+    req.id = accessPayload.id;
+    if (next) next();
+    return { id: req.id };
   }
   return false;
 };
@@ -71,9 +74,14 @@ const verifyToken = async (refreshToken, accessToken) => {
     if (!refreshToken && !accessToken) {
       return false;
     }
-    const refreshPayload = await jwt.verify(refreshToken, secretKey);
+    await jwt.verify(refreshToken, secretKey);
     const accessPayload = await jwt.verify(accessToken, secretKey);
-    if (whiteList[`${accessPayload.id}`] || whiteList[`${refreshPayload.id}`]) {
+    const data = await User.findAll({ Where: { id: accessPayload.id } });
+    const user = data[data.length - 1];
+    console.log(user.id);
+    console.log(whiteList[`${accessPayload.id}`]);
+    console.log(user.refreshToken);
+    if (whiteList[`${accessPayload.id}`] || user.refreshToken === refreshToken) {
       return true;
     }
     return false;
@@ -93,6 +101,7 @@ const invalidateRefreshToken = async (token) => {
 
 const invalidateAccessToken = (id) => {
   delete whiteList[`${id}`];
+  console.log(id);
 };
 
 module.exports.decodeToken = decodeToken;
