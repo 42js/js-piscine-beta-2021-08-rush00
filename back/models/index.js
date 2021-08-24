@@ -32,6 +32,7 @@ Object.keys(db).forEach((modelName) => {
 const User = sequelize.define('user', {
   username: { type: Sequelize.STRING(20), allowNull: false, unique: true },
   password: { type: Sequelize.STRING(60), allowNull: false },
+  indexToken: { type: Sequelize.STRING(200) },
 }, {
   charset: 'utf8',
   collate: 'utf8_general_ci',

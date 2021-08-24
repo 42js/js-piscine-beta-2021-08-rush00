@@ -3,18 +3,17 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const {
   decodeToken,
-  issueToken,
-  invalidateToken,
+  issueRefreshToken,
+  issueAccessToken,
+  invalidateRefreshToken,
+  invalidateAccessToken,
   verifyToken,
 } = require('./auth/authJwt');
 const { User } = require('../models/index');
 
-const env = process.env.NODE_ENV || 'development';
-const { expiresIn } = require('../config/config')[env];
-
 const router = express.Router();
 
-const badRequest = { msg: 'Bad Request' };
+const badRequest = { msg: 'Bad request' };
 const wrongInfo = { msg: 'Wrong username or password' };
 const alreadyLoggedIn = { msg: 'Already logged in' };
 const alreadyExist = { msg: 'User already exists' };
@@ -53,7 +52,7 @@ router
   .use(cookieParser())
   .post('/login', async (req, res) => {
     try {
-      if (await verifyToken(req.cookies.jwt_token)) {
+      if (await verifyToken(req.cookies.refresh_token, req.cookies.access_token)) {
         res.status(409).send(alreadyLoggedIn);
         return;
       }
@@ -63,7 +62,7 @@ router
         return;
       }
       const user = await findUserDatabyUsername(req.body.username);
-      if (user.length === 0) {
+      if (!user) {
         res.status(401).send(wrongInfo);
         return;
       }
@@ -72,10 +71,13 @@ router
         res.status(400).send(badRequest);
         return;
       }
-      const { token, exp } = await issueToken(user.dataValues.id);
+      const refresh = await issueRefreshToken(user.dataValues.id);
+      const access = await issueAccessToken(user.dataValues.id);
+
       res
         .status(200)
-        .cookie('jwt_token', token, { httpOnly: true, expires: new Date(exp) })
+        .cookie('access_token', access.token, { httpOnly: true, expires: new Date(access.exp) })
+        .cookie('refresh_token', refresh.token, { httpOnly: true, expires: new Date(refresh.exp) })
         .send({ msg: 'successfully logged in' });
     } catch (err) {
       res.status(500).send(internalError(err));
@@ -83,14 +85,20 @@ router
   })
   .post('/logout', async (req, res) => {
     try {
-      const userId = await decodeToken(req, res);
-      if (userId) {
-        invalidateToken(userId);
-        res.status(200).send({ msg: 'Successfully logged out' });
+      const { id } = await decodeToken(req, res);
+      if (id) {
+        invalidateRefreshToken(req.cookies.refresh_token);
+        invalidateAccessToken(id);
+        res.status(200).clearCookie().send({ msg: 'Successfully logged out' });
       }
     } catch (err) {
+      if (err.name === 'TokenExpiredError' || err.name === 'NotValidToken') {
+        res.status(401).send({ msg: 'Not logged in' });
+        return false;
+      }
       res.status(500).send(internalError(err));
     }
+    return false;
   })
   .get('/check', async (req, res) => {
     try {
