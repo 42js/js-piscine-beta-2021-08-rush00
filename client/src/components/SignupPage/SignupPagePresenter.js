@@ -25,7 +25,7 @@ function SignupPagePresenter({
                 >
                     <Form.Item
                         //label="name"
-                        name="Name"
+                        name="name"
                         rules={[
                             {
                                 required: true,
@@ -40,7 +40,7 @@ function SignupPagePresenter({
                         />
                     </Form.Item>
                     <Form.Item
-                        name="Email"
+                        name="email"
                         //label="Email"
                         rules={[
                             {
@@ -57,7 +57,7 @@ function SignupPagePresenter({
                         />
                     </Form.Item>
                     <Form.Item
-                        name="Password"
+                        name="password"
                         //label="Password"
                         rules={[
                             {
