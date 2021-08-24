@@ -10,7 +10,7 @@ export default function SignupPageContainer() {
     const onFinish = (body) => {
         console.log(body);
         axios
-            .post("http://localhost:4242/users/signup", body)
+            .post("/users/signup", body)
             .then((res) => {
                 console.log(res.message);
                 if (res.status === 200) {
