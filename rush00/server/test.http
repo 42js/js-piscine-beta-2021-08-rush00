@@ -1,0 +1,6 @@
+POST http://localhost:4242/board/content/2 HTTP/1.1
+Content-Type: application/json
+
+{
+    "comment": "2번째 게시글 댓글 1"
+}
