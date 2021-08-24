@@ -1,5 +1,6 @@
 require('dotenv').config();
 const express = require('express');
+const cors = require('cors');
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
@@ -21,8 +22,7 @@ app.use(cookieParser());
 app.use(passport.initialize()); //요청 req 객체에 passport 설정
 passportConfig();
 
-
-
+app.use(cors());
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 

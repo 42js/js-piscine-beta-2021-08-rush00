@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const router = express.Router();
 const AuthenticateJWT = require('../lib/auth');
 const UserController = require('../controllers/users');
@@ -8,7 +9,6 @@ const UserController = require('../controllers/users');
 router.get('/', function(req, res, next) {
   res.send('respond with a resource');
 });
-
 
 router.post('/signup',UserController.signup);
 

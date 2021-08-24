@@ -5,6 +5,7 @@ const { User } = require('../models')
 const tokenkey = process.env.TOKEN_KEY;
 
 const signup = async function (req, res) {
+  console.log("요청감지")
   const { name, email, password } = req.body;
   try {
     const exUser = await User.findOne({ where: { email } });
