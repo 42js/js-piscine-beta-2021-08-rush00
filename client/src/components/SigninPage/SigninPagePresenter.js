@@ -19,7 +19,7 @@ function SigninPagePresenter({
                     onFinish={onFinish}
                 >
                     <Form.Item
-                        name="Email"
+                        name="email"
                         //label="Email"
                         rules={[
                             {
@@ -36,7 +36,7 @@ function SigninPagePresenter({
                         />
                     </Form.Item>
                     <Form.Item
-                        name="Password"
+                        name="password"
                         //label="Password"
                         rules={[
                             {
