@@ -1,14 +1,14 @@
 import React from "react";
 import { Route, BrowserRouter as Router, Switch } from "react-router-dom";
 
-import CreateArticlePage from "./components/views/CreateArticlePage/CreateArticlePage";
-import LandingPage from "./components/views/LandingPage/LandingPage";
-import NavBar from "./components/views/NavBar/NavBar";
-import ProfilePage from "./components/views/ProfilePage/ProfilePage";
-import SigninPage from "./components/views/SigninPage/SigninPage";
-import SIgnupPage from "./components/views/SignupPage/SIgnupPage";
+import CreateArticlePage from "./components/CreateArticlePage/CreateArticlePage";
+import LandingPage from "./components/LandingPage/LandingPage";
+import NavBar from "./components/NavBar/NavBar";
+import ProfilePage from "./components/ProfilePage/ProfilePage";
 
 import { Layout } from "antd";
+import SignupPageContainer from "./components/SignupPage/SignupPageContainer";
+import SigninPageContainer from "./components/SigninPage/SigninPageContainer";
 const { Header } = Layout;
 
 function App() {
@@ -24,8 +24,8 @@ function App() {
                 <Route exact path="/" component={LandingPage} />
                 <Route path="/article/create" component={CreateArticlePage} />
                 <Route path="/profile" component={ProfilePage} />
-                <Route path="/signup" component={SIgnupPage} />
-                <Route path="/signin" component={SigninPage} />
+                <Route path="/signup" component={SignupPageContainer} />
+                <Route path="/signin" component={SigninPageContainer} />
             </Switch>
         </Router>
     );
