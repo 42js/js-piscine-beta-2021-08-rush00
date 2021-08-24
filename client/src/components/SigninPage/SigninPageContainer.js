@@ -7,15 +7,18 @@ function SigninPage() {
     const onFinish = (body) => {
         console.log(body);
         axios
-            .post("localhost:5000/users/signin", body)
+            .post("http://localhost:4242/users/login", body)
             .then((res) => {
                 console.log(res.message);
                 if (res.status === 200) {
+                    const { token } = res.data;
+                    axios.defaults.headers.common[
+                        "Authorization"
+                    ] = `Bearer ${token}`;
                     alert(" 완료되었습니다");
-                    window.location.replace("/signin");
+                    window.location.replace("/");
                 } else {
-                    alert("회원가입 실패");
-                    window.location.reload();
+                    alert("로그인 실패");
                 }
             })
             .catch((e) => {
