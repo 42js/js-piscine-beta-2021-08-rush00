@@ -1,3 +1,7 @@
+/*
+엑세스 토큰을 헤더에 담아서 요청할 때 사용하는 코드
+*/
+
 require('dotenv').config();
 const jwt = require('jsonwebtoken')
 const tokenKey = process.env.TOKEN_KEY;

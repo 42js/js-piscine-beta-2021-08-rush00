@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const router = express.Router();
-const AuthenticateJWT = require('../lib/auth');
+const authicate_JWT = require('../middlewares/authJWT');
 const UserController = require('../controllers/users');
 
 
@@ -14,7 +14,7 @@ router.post('/signup',UserController.signup);
 
 router.post('/login',UserController.login);
 
-router.post('/profile',AuthenticateJWT,UserController.profile);
+router.post('/profile',authicate_JWT,UserController.profile);
 
 
 module.exports = router;
