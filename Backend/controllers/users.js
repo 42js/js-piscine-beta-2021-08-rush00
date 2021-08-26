@@ -1,6 +1,7 @@
 require('dotenv').config();
 const passport = require('passport');
-const jwt = require('jsonwebtoken');
+const jwt = require('../jwt-util/jwt-utils');
+const redisClient = require('../lib/redis');
 const { User } = require('../models')
 const tokenkey = process.env.TOKEN_KEY;
 
@@ -48,19 +49,17 @@ const login = function (req, res) {
           res.send(loginError);
           return;
         }
-        jwt.sign({
-          id: user.id
-        },
-          tokenkey, {
-          expiresIn: '1h', //유통기간
-          issuer: 'ji-park.admin',
-          subject: 'user.login.info'
-        },
-          function (err, token) {
-            console.log('로그인 성공', token)
-            res.json({ token });
-          }
-        );
+        const accessToken = jwt.access_sign(user)
+        const refreshToken = jwt.refresh_sign();
+        redisClient.set(user.id, refreshToken); // 발급한 refresh token을 redis에 key를 user의 id로 하여 저장합니다.
+        res.cookie('access', accessToken,{
+          maxAge: 300000 * 1000000,
+          httpOnly :true
+        });
+        res.status(200).json({
+          user: user,
+          refreshToken : refreshToken
+        })
       });
     })(req, res);
   } catch (error) {
@@ -70,10 +69,10 @@ const login = function (req, res) {
 }
 
 const profile = async function (req, res) {
-  const user = req.decoded;
-  console.log(user);
+  const id = req.id;
+  console.log(req.id);
   try {
-    const profile = await User.findOne({ where: { id: user.id } })
+    const profile = await User.findOne({ where: { id: id } })
     console.log(profile);
     res.json(profile);
   }
